@@ -43,8 +43,28 @@ Focus-area oriented:
 - Redact real data in all evidence.
 - Log each active test (what, when, which account) so we can prove good faith.
 
+## Static-analysis notes (extension v4.0.5)
+
+Source maps had no `sourcesContent`, but exposed original module names; bundles
+beautified for reading. Architecture confirmed:
+
+- **Content Blocked** = network `webRequest.onBeforeRequest` block **only when
+  verdict is cached**; uncached → request allowed + async tab redirect + a
+  removable content-script white overlay with a 5.5 s fail-open timer and a
+  naive keyword fallback. → `F-001`.
+- **Screen View** = privileged `captureVisibleTab` in the background (page
+  cannot veto), but rate-limit fallback serves a ≤30 s cached frame. → `F-002`.
+
+Minor observations (not yet findings):
+
+- `manifest.json` `exclude_matches: https://*.linewize.net/*` — filter/categoriser
+  don't run on that host; plus a runtime `CHECK_DISABLE_CONTENT_SCRIPT`.
+- `web_accessible_resources` exposes `*.js.map` to all origins (minor info leak,
+  aids exactly this kind of analysis).
+- `isGoogleMapsVerdictBypass` — a hardcoded verdict bypass path worth examining.
+
 ## Test log
 
 | Date | Target | Action | Account | Notes |
 |---|---|---|---|---|
-| | | | | |
+| 2026-09-24 | ext v4.0.5 bundle | static analysis only (no live traffic) | n/a | mapped enforcement → F-001, F-002 |
