@@ -23,6 +23,15 @@ makes any bypass that still works here MORE severe** — it's reachable by a nor
 student, not a researcher with a console. Prefer these tool-free methods; the
 DevTools steps below are only for a machine where they happen to be allowed.
 
+### First: which block style is this deployment using?
+
+When blocked, check the **address bar**:
+- **Stays on the original site** + white sheet on top → *overlay style*. Print
+  trick (Test P) works.
+- **Flips to a block-page URL** → *redirect style* (cached network-level block).
+  Print gives you only the block page — **skip Test P**; use Test W / U, which
+  stall the verdict so the redirect never fires and the original page remains.
+
 ### Test P — Print-media overlay removal (no tools, from their own CSS)
 
 The hider injects `@media print { #linewize-protect { display:none !important } }`
