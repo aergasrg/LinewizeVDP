@@ -61,6 +61,14 @@ Defeats the core CIPA-compliance promise of the product for a broad set of
 categories on first visit / after cache eviction. No other user's data is
 involved — this is a control-integrity bypass on the tester's own device.
 
+**Reachable without DevTools.** Confirmed candidate methods work on a fully
+locked-down managed device (DevTools / `javascript:` / bookmarklets disabled):
+the extension's own `@media print { #linewize-protect { display:none } }` rule
+reveals the loaded page in Print Preview, and the OS Wi-Fi toggle starves the
+verdict into the 5.5s fail-open. A control a normal student can bypass with the
+print button raises real-world severity above the base CVSS. See
+`../recon/F-001-repro.md` Tests P / W / U.
+
 ## Evidence
 
 TODO: capture on an owned, managed device — screen recording (.mp4) of a

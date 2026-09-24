@@ -15,7 +15,49 @@ nothing. Screen-record everything; redact org/appliance IDs before submitting.
 - If the managed policy disables DevTools (`DeveloperToolsDisabled`), skip to the
   purely visual tests — you can still see the page flash and screen-record it.
 
-## Test A — is the block just a coat over a chair? (fastest)
+## No-DevTools environment (the realistic case)
+
+On a locked-down managed Chromebook DevTools, `javascript:` URLs and bookmarklets
+are all typically disabled (`DeveloperToolsDisabled`, `URLBlocklist`). **This
+makes any bypass that still works here MORE severe** — it's reachable by a normal
+student, not a researcher with a console. Prefer these tool-free methods; the
+DevTools steps below are only for a machine where they happen to be allowed.
+
+### Test P — Print-media overlay removal (no tools, from their own CSS)
+
+The hider injects `@media print { #linewize-protect { display:none !important } }`
+(`filter.bundle.js`, `hidePage`). The page is fully loaded underneath, so:
+
+1. Open a benign blocked URL; the white overlay appears.
+2. `Ctrl+P` (or menu → Print). In **Print Preview** the overlay is gone and the
+   blocked page content renders.
+3. "Save as PDF" to capture it. (If `PrintingEnabled` is off by policy, note that
+   in the report — preview alone still demonstrates the reveal.)
+
+This needs zero DevTools/`javascript:`/bookmarklets. Screen-record it.
+
+### Test W — Wi-Fi/verdict stall (no tools)
+
+Uses the OS network toggle (not a browser control, so browser policy can't block
+it) to starve the async verdict → 5.5s fail-open / `CHECK_INTERNET_CONNECTION →
+ALLOW` path.
+
+1. Visit a benign blocked URL once so it's in disk cache; confirm it's blocked.
+2. Turn **Wi-Fi off** from the ChromeOS system tray, then reload (or navigate via
+   address bar with a cached page).
+3. Watch whether the page reveals (verdict can't be fetched; fallback timer /
+   offline-ALLOW). Toggling Wi-Fi off *during* load is the timing variant.
+
+### Test U — Uncached URL + idle worker (no tools)
+
+1. Leave the browser idle ~1 min so the MV3 service worker evicts.
+2. In the address bar, open a **fresh** benign blocked URL with a random query
+   (`...?x=93217`) so no cached verdict exists.
+3. Watch for the page revealing after ~5.5s without a BLOCK. Repeat 5–10×.
+
+Capture all three on video; note category/URL; no other user's data involved.
+
+## Test A — is the block just a coat over a chair? (fastest, DevTools only)
 
 1. Navigate to a benign blocked URL. The white overlay appears.
 2. Open DevTools → Elements. Look for `<div id="linewize-protect">` at the end of
