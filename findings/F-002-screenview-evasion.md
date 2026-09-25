@@ -27,14 +27,23 @@ list against **every open tab** (not just the active one). In `captureTabAndSend
 (`S = false`) for the **entire** cycle. The live-view path checks the same
 (`restrictedDomainFound`, L58691).
 
-**Evasion:** park one restricted-listed domain (privacy categories — banking,
-health, etc.) in a pinned/background tab. Every screenshot — scheduled *and*
-on-demand live view — becomes the restricted placeholder while you do anything
-in another tab. A privacy feature ("don't screenshot my bank") becomes a
-universal monitoring blind.
+**Evasion:** park one restricted-listed domain in a pinned/background tab. Every
+screenshot — scheduled *and* on-demand live view — is replaced by the bundled
+placeholder (`restricted-screenshot.txt`, a JPEG reading **"Restricted
+website/testing application detected, Live View disabled"** with a crossed-out
+eye) while you do anything in another tab. A privacy feature becomes a universal
+content-monitoring blind.
 
-The list is policy-pushed and lives in the device config; a tester can discover
-which domains flip the placeholder **on their own screen** empirically.
+**Content-evasion, not stealth (accuracy for triage):** the placeholder openly
+says "Live View disabled", so a watching admin *sees that the screen is hidden* —
+they just can't see its contents. This defeats content monitoring, not the fact
+that monitoring is being evaded. Report it as such; do not oversell as invisible.
+
+The list is policy-pushed (`screenshotsConfig.restrictedDomains`) and lives in
+device config. The placeholder text ("testing application detected") implies the
+list includes security/testing tool domains as well as privacy categories — a
+tester can discover which domains flip the placeholder **on their own screen**
+empirically.
 
 ## Primitive 2 — Blank-frame starvation
 
